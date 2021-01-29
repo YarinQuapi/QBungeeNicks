@@ -1,0 +1,4 @@
+name: BungeeNickTest
+version: ${project.version}
+main: xyz.yarinlevi.qbungeenicks.QBungeeNicks
+author: Quapi
