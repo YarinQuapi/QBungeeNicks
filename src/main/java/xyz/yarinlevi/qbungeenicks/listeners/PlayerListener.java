@@ -36,7 +36,9 @@ public class PlayerListener implements Listener {
         ServerInfo serverInfo = player.getServer().getInfo();
 
         if (serverInfo != event.getFrom()) {
-            Utils.sendToServer(player.getUniqueId() + "_" + player.getDisplayName(), serverInfo);
+            if (!player.getDisplayName().equals(player.getName())) {
+                Utils.sendToServer(player.getUniqueId() + "_" + player.getDisplayName(), serverInfo);
+            }
         }
     }
 }

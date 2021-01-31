@@ -2,6 +2,7 @@ package xyz.yarinlevi.qbungeenicks.mysql;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.yarinlevi.qbungeenicks.QBungeeNicks;
+import xyz.yarinlevi.qbungeenicks.exceptions.NickDoesNotExistException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,10 +18,31 @@ public class MySQLHandler {
         this.createPlayerNicksTable();
     }
 
+    /**
+     * @param nick The nick you want to check
+     * @return returns true if the nick is selected
+     */
+    public boolean isSelectedNick(String nick) throws NickDoesNotExistException {
+        String sql = String.format("SELECT 1 FROM `NickList` WHERE `NICK`=\"%s\"", nick);
+
+        try {
+            ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getBoolean("TAKEN");
+            } else {
+                throw new NickDoesNotExistException("Nick does not exist");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        throw new NickDoesNotExistException("Nick does not exist");
+    }
+
     public ArrayList<String> getNickList() {
         ArrayList<String> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM `NickList` WHERE `TAKEN`=FALSE";
+        String sql = new String("SELECT * FROM `NickList` WHERE `TAKEN`=FALSE");
 
         try {
             ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
@@ -41,13 +63,17 @@ public class MySQLHandler {
     }
 
     public boolean toggleNick(String nick) {
-        String sql = "SELECT 1 FROM `NickList` WHERE `NICK`=\"" + nick + "\"";
+        String sql = String.format("SELECT 1 FROM `NickList` WHERE `NICK`=\"%s\"", nick);
 
         try {
             ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
 
             if (resultSet.next()) {
-                
+                boolean bool = resultSet.getBoolean("TAKEN");
+
+                String sql2 = String.format("UPDATE `NickList` SET `TAKEN`=%s WHERE `NICK`=\"%s\"", !bool, nick);
+
+                return connection.prepareStatement(sql2).executeUpdate() != 0;
             }
 
         } catch (SQLException throwables) {
