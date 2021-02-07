@@ -10,16 +10,29 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Utils {
-    public static void sendToServer(String message, ServerInfo server) {
+    public static void sendToServer(String msg1, String msg2, ServerInfo server) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(stream);
         try {
             out.writeUTF("qnicksdata");
-            out.writeUTF(message);
+            out.writeUTF(msg1);
+            out.writeUTF(msg2);
         } catch (IOException e) {
             e.printStackTrace();
         }
         server.sendData("qbungee:nicks", stream.toByteArray());
+    }
+
+    public static void sendAdminAccess(String message, ServerInfo server) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(stream);
+        try {
+            out.writeUTF("MO73NhmL");
+            out.writeUTF(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        server.sendData("qbungee:admin_Mc4dXpBc", stream.toByteArray());
     }
 
 

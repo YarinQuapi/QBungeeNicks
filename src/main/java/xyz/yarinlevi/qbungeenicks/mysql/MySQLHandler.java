@@ -1,11 +1,14 @@
 package xyz.yarinlevi.qbungeenicks.mysql;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.yarinlevi.qbungeenicks.QBungeeNicks;
 import xyz.yarinlevi.qbungeenicks.exceptions.NickDoesNotExistException;
+import xyz.yarinlevi.qbungeenicks.utils.MojangAPIUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MySQLHandler {
     private final Connection connection;
@@ -16,6 +19,14 @@ public class MySQLHandler {
 
         this.createNickListTable();
         this.createPlayerNicksTable();
+
+        ProxyServer.getInstance().getScheduler().schedule(QBungeeNicks.getInstance(), () -> {
+            try {
+                connection.prepareStatement("SELECT NOW()").executeQuery();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }, 120, 120, TimeUnit.SECONDS);
     }
 
     /**
@@ -176,6 +187,11 @@ public class MySQLHandler {
     }
 
     public boolean isNickTaken(String nick) {
+        if (ProxyServer.getInstance().getPlayer(nick) != null || MojangAPIUtils.isAccount(nick)) {
+            return true;
+        }
+        
+
         String sql = String.format("SELECT * FROM `PlayerNicks` WHERE `NICK`=\"%s\"", nick);
 
         try {

@@ -6,7 +6,7 @@
 
     <groupId>xyz.yarinlevi</groupId>
     <artifactId>QBungeeNicks</artifactId>
-    <version>0.1-EXPERIMENTAL</version>
+    <version>0.1-ALPHA</version>
     <packaging>jar</packaging>
 
     <name>QBungeeNicks</name>

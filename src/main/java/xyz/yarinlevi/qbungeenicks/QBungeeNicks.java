@@ -25,6 +25,7 @@ public final class QBungeeNicks extends Plugin {
         instance = this;
 
         if (!getDataFolder().exists())
+            //noinspection ResultOfMethodCallIgnored
             getDataFolder().mkdir();
 
         File file = new File(getDataFolder(), "config.yml");
@@ -47,7 +48,9 @@ public final class QBungeeNicks extends Plugin {
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
 
-        this.getProxy().getPluginManager().registerCommand(this, new MainCommand("qnick", "qbungeenicks.use"));
+        this.getProxy().getPluginManager().registerCommand(this, new MainCommand("qnick", "qbungeenicks.use", "nick"));
+
+        //ProxyServer.getInstance().registerChannel("qbungee:admin_Mc4dXpBc");
     }
 
     @Override

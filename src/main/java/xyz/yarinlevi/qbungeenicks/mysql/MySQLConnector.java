@@ -31,6 +31,8 @@ public class MySQLConnector {
         dataSource.addDataSourceProperty("password", pass);
         dataSource.addDataSourceProperty("useSSL", ssl);
         dataSource.addDataSourceProperty("autoReconnect", true);
+        dataSource.addDataSourceProperty("useUnicode", true);
+        dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
 
         try {
             instance.getLogger().warning("Please await mysql hook...");
